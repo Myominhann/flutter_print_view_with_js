@@ -47,7 +47,7 @@ class DemoAppState extends State<DemoApp> {
                 new RaisedButton(
                   child: const Text('PDF View'),
                   onPressed: () {
-                    printpdfview("http://127.0.0.1:8080/", "{title:'hello world i am myo min han'}");
+                    printpdfview("http://127.0.0.1:8080/", "{title:'hello world'}");
                   },
                 ),
               ],

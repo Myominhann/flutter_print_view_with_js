@@ -1,0 +1,477 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice Test</title>
+    <link href="style.css" rel="stylesheet" />
+    <script src="jquery-1.11.2.min.js"></script>
+    <script src="handlebars-v3.0.0.js"></script>
+    <script src="jquery-ui.js"></script>
+    <style>
+        .page {
+             width: 21cm;
+             height: 29.7cm;
+             border: 0px solid black;
+             position:relative;
+        }
+
+        .page_break {
+            page-break-before: always;  
+            height:5px;
+            margin-top:10px;
+            margin-bottom: 10px;
+            border-top:2px dotted grey; 
+             border-bottom:2px dotted grey;         
+                 }
+
+        @media print {
+            .page_break {
+                display:none;
+            }
+
+            .page {
+                border:none;
+                margin:0;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <script>
+        var lines = [
+            { "no": "1", "item_name": "abcd abcd \n abcd" },
+            { "no": "1", "item_name": "abcd abcd \n abcd" },
+            { "no": "1", "item_name": "abcd abcd \n abcd" },
+            { "no": "1", "item_name": "abcd abcd \n abcd" },
+        ];
+
+        var data = {
+            "billing_address": {
+                "_id": "1646cdc2-944f-44a6-b688-f0321fb32fc5",
+                "_rev": "1-5a26e650c4ff43dda1b5600817d478d6",
+                "city": "Yangon",
+                "customer_id": "4152c52a-d25d-4ce9-88ea-9200a32194d7",
+                "phones": "01909289, 092387892",
+                "state": "Yangon",
+                "street_address": "No.29, Upper Pan Soe Dan St, Kyouk Tadar Tsp",
+                "type": "address"
+            },
+            "customer": {
+                "_id": "4152c52a-d25d-4ce9-88ea-9200a32194d7",
+                "_rev": "1-a07a9f5387e926971cb6360f43510a88",
+                "created_at": 1424938475131,
+                "foreign_name": "",
+                "name": "U Aung Myint",
+                "type": "partner"
+            },
+            "delivery_date": 1425101785245,
+            "document_date": 1425101696856,
+            "location": "Store-1",
+            "number": "2802-0134",
+            "overall_discount": 0,
+            "sale_id": "575bbe77-d4db-491f-b008-d36a90c69fbd",
+            "sale_lines": [
+              {
+                  "discount": 0,
+                  "item": {
+                      "_id": "item003",
+                      "_rev": "2-a4460309e8f558e082be4a9b8822c276",
+                      "code": "ITM222",
+                      "description": "Ullamco ipsum consectetur aliquip irure culpa ut.",
+                      "name": "4lb Hammer - Wooden Handle",
+                      "type": "item"
+                  },
+                  "quantity": 1,
+                  "sub_total": 1000,
+                  "unit_price": 1000
+              },
+              {
+                  "discount": 0,
+                  "item": {
+                      "_id": "item003",
+                      "_rev": "2-a4460309e8f558e082be4a9b8822c276",
+                      "code": "ITM222",
+                      "description": "Ullamco ipsum consectetur aliquip irure culpa ut.",
+                      "name": "UPG Gold Paint ",
+                      "type": "item"
+                  },
+                  "quantity": 19,
+                  "sub_total": 133000,
+                  "unit_price": 7000
+              },
+              {
+                  "discount": 0,
+                  "item": {
+                      "_id": "item002",
+                      "_rev": "2-7d0d0ce69eed115532c819ecce74213c",
+                      "code": "ITM403",
+                      "description": "Esse est esse veniam esse aliquip anim aute voluptate est do eu magna.",
+                      "name": "6' Roller",
+                      "type": "item"
+                  },
+                  "quantity": 1,
+                  "sub_total": 1000,
+                  "unit_price": 1000
+              }
+            ],
+            "status": "Open",
+            "tax": 0,
+            "total": 2000,
+            "type": "sales_order"
+        }
+    </script>
+
+    <script id="page" type="text/x-handlebars-template">
+        <div class="page">
+            
+        </div>
+    </script>
+
+    <script id="page_break" type="text/x-handlebars-template">
+        <div class="page_break">
+        </div>
+    </script>
+
+
+    <script id="page-header-template" type="text/x-handlebars-template">
+        <header class="clearfix" style="margin-left:10px; margin-right:10px">
+
+            <div id="logo">
+                <img src="logo.png">
+            </div>
+            <div id="company" style="margin-top:18px;">
+                <h2 class="name">Yar Tat Pan</h2>
+                <div>No. 44, Thit Sarr St, Saw Bwarr Gee Gone , Yangon. </div>
+                <div>)1699453, 01234344, 0943045690</div>
+            </div>
+
+        </header>
+    </script>
+
+
+    <script id="page-footer-template" type="text/x-handlebars-template">
+        <footer >
+            {{footer}}
+        </footer>
+    </script>
+
+    <script id="notices-template" type="text/x-handlebars-template">
+        <div id="thanks">Thank you!</div>
+        <div id="notices">
+            <div>NOTICE:</div>
+            <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
+        </div>
+    </script> 
+
+     
+    <script id="total-line-template" type="text/x-handlebars-template">
+        <tfoot style="display:none;">
+            <tr>
+                <td colspan="3"></td>
+                <td colspan="2">SUBTOTAL</td>
+                <td><b>$1,200.00</b></td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+                <td colspan="2">TAX 25%</td>
+                <td><b>$1,200.00</b></td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+                <td colspan="2">GRAND TOTAL</td>
+                <td><b>$6,500.00</b></td>
+            </tr>
+        </tfoot>
+    </script>
+
+
+    <script id="document-header-template" type="text/x-handlebars-template">
+        <div id="details" class="clearfix" style="border-bottom:1px dotted #EEEEEE;">
+            <div id="client">
+                <div style="
+                 color:white;
+                 border:0px solid black;
+                 text-align:center;
+                 margin:0px 0px 20px 0px;
+                 background:#27b5ab; position:relative;  min-width:100px; float:left;">
+
+                    <p style=" font-size:16px;"><b>INVOICE</b></p>
+                </div>
+
+                <table id="clientTable">
+                    <tr>
+                        <td><b style="font-size: 1em; text-align:left;">CUSTOMER NAME</b></td>
+                        <td>:</td>
+                        <td style="text-align:left;">{{customer.name}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 1em; text-align:left;"><b>ADDRESS</b></td>
+                        <td>:</td>
+                        <td style="text-align:left;">{{billing_address.street_address}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 1em; text-align:left;"><b>PHONE</b></td>
+                        <td>:</td>
+                        <td style="text-align:left;">{{billing_address.phones}}</td>
+                    </tr>
+                </table>
+
+            </div>
+            <div id="invoice">
+                <h1>{{number}}</h1>
+                <div class="date"><b>ISSUED DATE : {{document_date}}</b></div>
+                <div class="date"><b>DUE DATE: {{delivery_date}}</b></div>
+            </div>
+        </div>
+    </script>
+
+    <script id="sale-line-table" type="text/x-handlebars-template">
+        <table class="sale-line-table">
+
+        </table>
+    </script>
+
+    <script id="sale-line-thead" type="text/x-handlebars-template">
+        <thead>
+            <tr>
+                <th class="no"><b>#</b></th>
+                <th class="desc"><b>DESCRIPTION</b></th>
+                <th class="unit"><b>UNIT PRICE</b></th>
+                <th class="qty"><b>QUANTITY</b></th>
+                <th class="uom"><b>U.O.M</b></th>
+                <th class="total"><b>TOTAL</b></th>
+            </tr>
+        </thead>
+    </script>
+
+    <script id="sale-line-table-row" type="text/x-handlebars-template">
+        <tr>
+            <td class="no">{{-index}}</td>
+            <td class="desc"><b>{{item.name}}</b><p style="-webkit-margin-before: 0.5em; -webkit-margin-after: 0.5em;">{{item.description}}</p></td>
+            <td class="unit">{{unit_price}}</td>
+            <td class="qty">{{quantity}}</td>
+            <td class="uom">Unit</td>
+            <td class="total"><b>{{sub_total}}</b></td>
+        </tr>
+    </script>
+
+    <script id="sale-line-total" type="text/x-handlebars-template">
+
+        <tfoot >
+            <tr>
+                <td colspan="3"></td>
+                <td colspan="2">SUBTOTAL</td>
+                <td><b>{{total}}</b></td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+                <td colspan="2">TAX 25%</td>
+                <td><b>{{overall_discount}}</b></td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+                <td colspan="2">GRAND TOTAL</td>
+                <td><b>{{total}}</b></td>
+            </tr>
+        </tfoot>
+
+    </script>
+
+
+    <script id="sale-line-header" type="text/x-handlebars-template">
+        <div class="line">
+            <div class="sale-line-head">
+                <div class="col-width-sm text-center">No.</div>
+                <div class="col-width-lg text-left">Item Description</div>
+                <div class="col-width-md text-center">Unit Price</div>
+                <div class="col-width-sm text-center">U.O.M</div>
+                <div class="col-width-sm text-right">Quantity</div>
+                <div class="col-width-md text-right">Total</div>
+            </div>
+        </div>
+    </script>
+
+
+    <script id="line-template" type="text/x-handlebars-template">
+        <div class="line">
+            <div class="sale-line-head">
+                <div class="col-width-sm text-center">#</div>
+                <div class="col-width-lg text-justify"><h4>{{item.name}}</h4>{{item.description}}</div>
+                <div class="col-width-md text-center">{{unit_price}}</div>
+                <div class="col-width-sm text-center">Unit</div>
+                <div class="col-width-sm text-right">{{quantity}}</div>
+                <div class="col-width-md text-right">{{sub_total}}</div>
+            </div>
+            </div>
+    </script>
+
+
+
+
+
+
+    <script>
+
+        //Main A4page Template
+
+        var page = $("#page").html();
+        var page_template = Handlebars.compile(page);
+        var page_context = {};
+        var page_html = page_template(page_context);
+
+        //Page Break
+        var page_break = $("#page_break").html();
+        var page_break_template = Handlebars.compile(page_break);
+        var page_break_context = {};
+        var page_break_html = page_break_template(page_break_context);
+
+        // Sale Line Table Template  
+        var sale_table = $("#sale-line-table").html();
+        var sale_table_template = Handlebars.compile(sale_table);
+        var sale_table_context = {};
+        var sale_table_html = sale_table_template(sale_table_context);
+
+        // Sale Line Table Head Template  
+        var sale_table_head = $("#sale-line-thead").html();
+        var sale_table_head_template = Handlebars.compile(sale_table_head);
+        var sale_table_head_context = {};
+        var sale_table_head_html = sale_table_head_template(sale_table_head_context);
+
+        // Sale Line Table Row Head Template  
+        var sale_table_row = $("#sale-line-table-row").html();
+        var sale_table_row_template = Handlebars.compile(sale_table_row);
+       
+        // Sale Line Table Head Template  
+        var sale_line_total = $("#sale-line-total").html();
+        var sale_line_total_template = Handlebars.compile(sale_line_total);
+        var sale_line_total_context = data;
+        var sale_line_total_html = sale_line_total_template(data);
+
+        // Page Header Template  
+        var ph = $("#page-header-template").html();
+        var ph_template = Handlebars.compile(ph);
+        var ph_context = {};
+        var ph_html = ph_template(ph_context);
+
+        //Document Header Template
+        var dh = $("#document-header-template").html();
+        var dh_template = Handlebars.compile(dh);
+        
+        var doc_date = $.datepicker.formatDate('dd - M - yy', new Date(data.document_date));
+        var delivery_date = $.datepicker.formatDate('dd - M - yy', new Date(data.delivery_date));
+
+       /* var dh_context = {
+            name: data.customer.name,
+            street_address: data.billing_address.street_address,
+            phones: data.billing_address.phones,
+            number: data.number,
+            document_date: doc_date,
+            delivery_date:delivery_date
+        };*/
+        var dh_html = dh_template(data);
+
+        var line_header = $("#sale-line-header").html();
+        var line_header_template = Handlebars.compile(line_header);
+        var line_header_context = {};
+        var line_header_html = line_header_template(line_header_context);
+
+        //Item List Template
+        var l = $("#line-template").html();
+        var l_template = Handlebars.compile(l);
+
+
+        //Notice Template
+        var notice = $("#notices-template").html();
+        var notice_template = Handlebars.compile(notice);
+        var notice_context = {};
+        var notice_html = notice_template(notice_context);
+
+
+        //Page Footer Template
+        var pf = $("#page-footer-template").html();
+        var pf_template = Handlebars.compile(pf);
+        var pf_context = { footer: "Invoice was created on a computer and is valid without the signature and seal." };
+        var pf_html = pf_template(pf_context);
+
+       
+
+
+        var size = 0;
+        for (var i = 0; i < data.sale_lines.length; i++) {
+            if (i == 0) {
+                var ph_element = $(ph_html);
+                var pf_element = $(pf_html);
+                var dh_element = $(dh_html);
+                var page_element = $(page_html);
+                // var lh_element = $(line_header_html);
+                var table_element = $(sale_table_html);
+                var thead_element = $(sale_table_head_html);
+                $(document.body).append(page_element)
+               //$(document.body).append(ph_element)
+                //$(document.body).append(dh_element)
+                $(page_element).append(ph_element);
+                $(page_element).append(pf_element);
+                $(page_element).append(dh_element);
+                // $(page_element).append(lh_element);
+                $(page_element).append(table_element);
+                $(table_element).append(thead_element);
+                
+                size += table_element.height();
+                size += ph_element.height();
+                
+            }
+
+            //var l_context = lines[i];
+            var l_html = sale_table_row_template(data.sale_lines[i]);
+            var l_element = $(l_html);            
+            $(table_element).append(l_element);
+            size += l_element.height();
+            if (i == data.sale_lines.length - 1) {
+                var total_element = $(sale_line_total_html);
+                $(table_element).append(total_element);
+            }
+
+            if (size > 300 ) {
+               
+                size = 0;
+                var ph_element = $(ph_html);
+                var pf_element = $(pf_html);
+                var page_element = $(page_html);
+                var page_break_element = $(page_break_html)
+                var table_element = $(sale_table_html);
+                var thead_element = $(sale_table_head_html);
+                var total_element = $(sale_line_total_html);
+                var notice_element = $(notice_html);
+               // $(document.body).append(pf_element);
+                if (i != data.sale_lines.length - 1) {
+                    //   $(pf_element).css({ "page-break-after": "always" });
+                    $(document.body).append(page_break_element);
+                    $(document.body).append(page_element);
+                     $(page_element).append(ph_element);
+                     $(page_element).append(pf_element);
+                     $(page_element).append(table_element);
+                     $(table_element).append(thead_element);
+                    $(page_element).append(notice_element);
+                   
+                } 
+                
+                size += table_element.height();
+                size += ph_element.height();
+            }
+        }
+
+
+
+
+
+    </script>
+
+
+
+</body>
+
+</html>

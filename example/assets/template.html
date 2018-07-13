@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice Test</title>
+    <script src="jquery-1.11.2.min.js"></script>
+    <script src="handlebars-v3.0.0.js"></script>
+    <style>
+        @page{
+            size:A4;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="@page">
+
+    </div>
+
+    <script id="page-header-template" type="text/x-handlebars-template">
+        <div style="background-color:beige">
+            <h1>Page Header</h1>         
+        </div>
+    </script>
+
+    <script id="page-footer-template" type="text/x-handlebars-template">
+        <div style="background-color:beige">
+            <h1>Page Footer</h1>
+        </div>
+    </script>
+
+    <script id="entry-template" type="text/x-handlebars-template">
+        <div class="entry">
+            <h1>{{title}}</h1>
+            <div class="body">
+			</br></br></br></br></br>
+					
+				   {{body}}</br></br></br></br>
+				   
+            </div>
+        </div>
+    </script>
+	
+
+
+    <script>
+
+		var source = $("#entry-template").html();
+        var template = Handlebars.compile(source);
+
+        var context = { title: "Title", body: "Body Legs Arms." };
+        var html = template(context);
+        var element = $(document.body).append(html);
+		
+        alert($(element).height());
+		
+    </script>
+
+
+
+</body>
+
+</html>

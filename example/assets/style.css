@@ -1,0 +1,325 @@
+@font-face {
+  font-family: SourceSansPro;
+  src: url(SourceSansPro-Regular.ttf);
+}
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+a {
+  color: #0087C3;
+  text-decoration: none;
+}
+
+body {
+  position: relative;
+  width: 21cm;  
+  height: 29.7cm; 
+  margin: 0 auto; 
+  color: #555555;
+  background: #FFFFFF; 
+  font-family: Arial, sans-serif; 
+  font-size: 14px; 
+  font-family: SourceSansPro;
+}
+
+body p{
+	-webkit-margin-before: 0.5em;
+	-webkit-margin-after: 0.5em;
+}
+
+header {
+  padding: 10px 0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #AAAAAA;
+}
+
+#logo {
+  float: left;
+  margin-top: 8px;
+}
+
+#logo img {
+  height: 100px;
+}
+
+#company {
+  float: right;
+  text-align: right;
+}
+
+
+#details {
+  margin-bottom: 40px;
+  padding-bottom:10px;
+  border:0px solid black;
+   margin-left:10px;
+    margin-right:10px
+}
+
+#client {
+  border:0px solid black;
+  width:98.5%;
+  margin-left:0px;
+  margin-right:10px;
+  float: left;
+   background:#F7F8FA;
+  border-left: 6px solid #27b5ab;
+  border-right: 6px solid #27b5ab;
+}
+
+#client .to {
+  color: #777777;
+}
+
+.doctype {
+                 color:white;
+                 border:0px solid black;
+                 clear:right;
+                 width:100%;    
+}
+
+.doctype p{
+                 color:white;
+                 float:left;
+                   margin-left:0px;
+                 clear:right;
+                 text-align:center;
+                 padding:8px;
+                 background:#27b5ab;  
+                 min-width:100px;
+}
+
+#clientTable {
+border:0px solid black; 
+/*border-left: 6px solid #27b5ab;*/
+ width: 60%;
+float:left;
+ background:#F7F8FA;
+ -webkit-padding-start: 0px;
+ -webkit-margin-before: 0em; 
+ margin-bottom:0px;
+ line-height:0.8em;
+}
+
+#clientTable td{
+	border:0px solid black;
+}
+
+h2.name {
+  font-size: 1.4em;
+  font-weight: normal;
+  margin: 0;
+}
+
+#invoice {
+   // width: 30%;
+  float: right;
+  text-align: right;
+  height:75px;
+ /*border-right:4px solid #27b5ab;*/ 
+   /*border-bottom:1px solid black;
+  border-top:1px solid black; */
+  padding:10px;
+  background:#F7F8FA;
+}
+
+#invoice h1 {
+  color: #27b5ab;
+  font-size: 2.4em;
+  line-height: 0.8em;
+  font-weight: normal;
+  margin: 0  0 10px 0;
+}
+
+#invoice .date {
+  font-size: 1.1em;
+  color: #777777;
+}
+
+table {
+  width: 98%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-bottom: 20px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+table th,
+table td {
+  padding: 10px;
+  background: #F7F8FA;
+  text-align: center;
+  border: 1px solid #FFFFFF;
+}
+
+table th {
+  white-space: nowrap;        
+  font-weight: normal;
+  background: #a0a8bc;
+  color: #000000;
+  border-color:#dfe2dc;
+}
+
+table td {
+  text-align: right;
+}
+
+table td h3{
+  color: #545454;
+  font-size: 1.2em;
+  font-weight: normal;
+  margin: 0 0 0.2em 0;
+}
+
+table .no {
+  font-size: 1.6em;
+  text-align: center;
+  width:10%;
+}
+
+table .desc {
+  text-align: left;
+  width:40%;
+}
+
+table .unit {
+  text-align: center;
+  width:10%;
+}
+
+table .uom {
+  text-align: center;
+  width:10%;
+}
+
+table .qty {
+	text-align: right;
+	width:10%;
+}
+
+table .total { 
+  font-size:1.1em;
+  text-align: right;
+  padding-right:20px;
+  width:20%;
+}
+table tbody .total {
+      background:#e9edf0;
+      color: #545454;
+}
+
+table td.unit,
+table td.qty,
+table td.total {
+  font-size: 1.2em;
+}
+
+
+
+table tbody tr:last-child td {
+  border: 1px solid #FFFFFF;
+}
+
+table tfoot td {
+  padding: 10px 20px;
+  background: #FFFFFF;
+  border-bottom: none;
+  font-size: 1.2em;
+  white-space: nowrap; 
+  border-top: 1px solid #AAAAAA; 
+}
+
+table tfoot tr:first-child td {
+  border-top: none; 
+}
+
+table tfoot tr:last-child td {
+
+  font-size: 1.3em;
+  border-top: 1px solid #AAAAAA; 
+
+}
+
+table tfoot tr td:first-child {
+  border: none;
+}
+
+#thanks{
+    width:100%;
+  font-size: 2em;
+  margin-bottom: 15px;
+  text-align:center;
+  position: absolute;
+ bottom:4cm;
+}
+
+#notices{
+  padding-left: 10px;
+  border-left: 0px solid #666666;  
+  margin-bottom:20px;
+ position: absolute;
+ bottom:1cm;
+}
+
+#notices .notice {
+  font-size: 1.2em;
+}
+
+footer {
+  color: #777777;
+  width: 100%;
+  height: 10px;
+  border-top: 1px solid #AAAAAA;
+  padding: 8px 0;
+  text-align: center;
+  position:absolute;
+  bottom:0;
+}
+
+
+.A4page{
+
+        width: 21cm;
+        min-height: 29.7cm;
+        padding: 2cm;
+        margin: 1cm auto;
+        border: 1px #D3D3D3 solid;
+        border-radius: 5px;
+        background: white;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+
+}
+
+@A4page{
+			size:A4;
+		}
+
+
+
+.text-center {
+    text-align:center;
+}
+
+.text-left {
+    text-align:left;
+}
+
+.text-right {
+    text-align:right;
+}
+
+.text-justify {
+     text-align:justify;  
+}
+
+
+.fixed-height{
+
+	min-height:0px;
+	
+}	

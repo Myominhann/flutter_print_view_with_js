@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/print_view_with_js.iml" filepath="$PROJECT_DIR$/print_view_with_js.iml" />
+      <module fileurl="file://$PROJECT_DIR$/print_view_with_js_android.iml" filepath="$PROJECT_DIR$/print_view_with_js_android.iml" />
+    </modules>
+  </component>
+</project>

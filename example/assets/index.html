@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice Test</title>
+    <link href="style.css" rel="stylesheet" />
+    <script src="jquery-1.11.2.min.js"></script>
+    <script src="handlebars-v3.0.0.js"></script>
+    <script src="jquery-ui.js"></script>
+</head>
+</html>
+<script id="page" type="text/x-handlebars-template">
+    <div class="page">
+        <h1>{{title}}</h1>
+    </div>
+</script>
+
+<script>
+    //$(document).ready(render);
+    function render(data){
+    var page = $("#page").html();
+    var page_template = Handlebars.compile(page);
+    var page_context = data;
+    var page_html = page_template(page_context);
+
+    var page_element = $(page_html);
+
+    $(document.body).append(page_element)
+    }
+
+</script>

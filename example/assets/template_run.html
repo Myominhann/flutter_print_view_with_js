@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice Test</title>
+    <link href="style.css" rel="stylesheet" />
+	<script src="document.js"></script>
+    <script src="jquery-1.11.2.min.js"></script>
+    <script src="handlebars-v3.0.0.js"></script>
+    <script src="jquery-ui.js"></script>
+    <script src="template-engine.js"></script>
+    <style type="text/css" media="print">
+        @page {
+            size: auto; /* auto is the current printer page size */
+            margin: 5mm; /* this affects the margin in the printer settings */
+        }
+
+        body {
+            background-color: #FFFFFF;
+            border: solid 0px black;
+            margin: 0px; /* the margin on the content before printing */
+        }
+    </style>
+    <style>
+        .page {
+            width: 21cm;
+            height: 29.7cm;
+            border: 0px solid black;
+            position: relative;
+        }
+
+        .page_break {
+            page-break-before: always;
+            height: 5px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border-top: 2px dotted grey;
+            border-bottom: 2px dotted grey;
+        }
+
+        @media print {
+            .page_break {
+                display: none;
+            }
+
+            .page {
+                border: 0px solid black;
+                margin: 1mm;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+	
+
+    <script id="page" type="text/x-handlebars-template">
+        <div class="page">
+
+        </div>
+    </script>
+
+    <script id="page_break" type="text/x-handlebars-template">
+        <div class="page_break">
+        </div>
+    </script>
+
+    <script id="page-header-template" type="text/x-handlebars-template">
+        <header class="clearfix">
+
+            <div id="logo">
+                <img src="data:image/png;base64,{{company.logo}}">
+            </div>
+            <div id="company" style="margin-top:35px;">
+                <h2 class="name">{{company.name}}</h2>
+                <div>{{company.address}}</div>
+                <div>{{company.phone}}</div>
+            </div>
+
+        </header>
+    </script>
+
+    <script id="page-footer-template" type="text/x-handlebars-template">
+        <footer>
+            {{footer}}
+        </footer>
+    </script>
+
+    <script id="notices-template" type="text/x-handlebars-template">
+        <div id="notice_div">
+            <div id="thanks">Thank you!</div>
+            <div id="notices">
+                <div>NOTICE:</div>
+                <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
+            </div>
+        </div>
+    </script>
+
+    <script id="document-header-template" type="text/x-handlebars-template">
+        <div id="details" class="clearfix" style="border-bottom:1px dotted #EEEEEE;">
+            <div class="doctype">
+                <p style=" font-size:16px; background: {{color}}"><b>{{type}}</b></p>
+            </div>
+            <div id="client" style="border-color: {{color}}">
+
+                <table id="clientTable">
+                    <tr>
+                        <td style="font-size: 1em; text-align:left;"><b>CUSTOMER NAME</b></td>
+                        <td>:</td>
+                        <td style="text-align:left;">{{customer.name}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 1em; text-align:left;"><b>ADDRESS</b></td>
+                        <td>:</td>
+                        <td style="text-align:left;">{{billing_address.street_address}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 1em; text-align:left;"><b>PHONE</b></td>
+                        <td>:</td>
+                        <td style="text-align:left;">{{billing_address.phones}}</td>
+                    </tr>
+                </table>
+
+                <div id="invoice">
+                    <h1 style="color:{{color}};">{{number}}</h1>
+                    <div class="date"><b>{{formatdate document_date "ISSUED DATE"}}</b></div>
+                    <div class="date"><b>{{formatdate delivery_date "DUE DATE"}}</b></div>
+                    <div class="date"><b>{{formatdate valid_until "VALID UNTIL"}}</b></div>
+                </div>
+
+            </div>
+
+        </div>
+    </script>
+
+    <script id="sale-line-table" type="text/x-handlebars-template">
+        <table class="sale-line-table"></table>
+    </script>
+
+    <script id="sale-line-thead" type="text/x-handlebars-template">
+        <thead>
+            <tr>
+                <th class="no"><b>#</b></th>
+                <th class="desc"><b>DESCRIPTION</b></th>
+                <th class="unit"><b>UNIT PRICE</b></th>
+                <th class="qty"><b>QUANTITY</b></th>
+                <th class="uom"><b>U.O.M</b></th>
+                <th class="total"><b>TOTAL</b></th>
+            </tr>
+        </thead>
+    </script>
+
+    <script id="sale-line-table-row" type="text/x-handlebars-template">
+        <tr id=" row">
+            <td class="no" id="no">{{index}}</td>
+            <td class="desc"><b>{{item.name}}</b><p style="-webkit-margin-before: 0.5em; -webkit-margin-after: 0.5em;">{{item.description}}</p></td>
+            <td class="unit">{{unit_price}}</td>
+            <td class="qty">{{quantity}}</td>
+            <td class="uom">Unit</td>
+            <td class="total"><b>{{sub_total}}</b></td>
+        </tr>
+    </script>
+
+    <script id="sale-line-total" type="text/x-handlebars-template">
+
+        <tfoot>
+            <tr>
+                <td colspan="3"></td>
+                <td colspan="2">SUBTOTAL</td>
+                <td><b>{{subTotal}}</b></td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+                <td colspan="2">DISCOUNT</td>
+                <td><b>{{discount}}</b></td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+                <td colspan="2">TAX </td>
+                <td><b>{{taxs}}</b></td>
+            </tr>
+            <tr>
+                <td colspan=" 3"></td>
+                <td colspan="2"><p>GRAND TOTAL</p></td>
+                <td><b>{{grandTotal}}</b></td>
+            </tr>
+        </tfoot>
+
+    </script>
+
+
+
+<script>
+    var maximum_size = 799;
+    var theme_color = '#5A6789';
+	
+       $(document).ready(randerTemplate(doc));
+    </script>
+
+</body>
+
+</html>
